@@ -2,7 +2,7 @@ package com.learing.springPizzeria.repository;
 
 import com.learing.springPizzeria.model.Pizza;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+//import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
