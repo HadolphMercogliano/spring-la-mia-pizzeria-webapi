@@ -2,19 +2,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <th:block th:fragment="bootstrap"></th:block>
+  <th:block th:replace="fragments :: bootstrap"></th:block>
+
   <title>Pizzeria Java</title>
 </head>
 <body>
-<h1>Pizze</h1>
-<ul th:if="${pizze.size() != 0}">
-  <li th:each="p : ${pizze}">
-    [[${p.name}]]
-  </li>
-</ul>
+<div class="container ">
+<h1 class="text-center my-5">Pizze</h1>
+<div>
+  <form th:action="@{pizza}" method="GET" class="d-flex justify-content-end" >
+    <div class="input-group mb-3 d-flex w-25 ">
+      <input type="search" class="form-control " th:value="${searchString}" placeholder="Cerca per nome" name="keyword">
+      <button class="btn btn-outline-primary" type="submit">Button</button>
+    </div>
+  </form>
+</div>
+  <table class="table table-striped" th:if="${pizze.size() != 0}">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nome</th>
+      <th scope="col">Descrizione</th>
+      <th scope="col">Prezzo</th>
+      <th scope="col">Azioni</th>
 
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${pizze}" class="align-middle">
+      <th scope="row" th:text="${p.id}"></th>
+      <td th:text="${p.name}"></td>
+      <td th:text="${p.description}">Otto</td>
+      <td th:text="|€ ${p.price}|"></td>
+      <td><a th:href="|/pizza/${p.getId()}|">Dettaglio</a></td>
+    </tr>
+    </tbody>
+  </table>
 <h2 th:if="${pizze.size() == 0 || pizze == null}">
   Non ci sono pizze disponibili!
 </h2>
+</div>
 </body>
 </html>
