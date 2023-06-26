@@ -8,15 +8,17 @@
 </head>
 <body>
 <div class="container ">
-<h1 class="text-center my-5">Pizze</h1>
-<div>
-  <form th:action="@{pizza}" method="GET" class="d-flex justify-content-end" >
-    <div class="input-group mb-3 d-flex w-25 ">
-        <input type="search" class="form-control " th:value="${searchString}" placeholder="Cerca per nome" name="keyword">
-        <button class="btn btn-outline-primary" type="submit">Cerca</button>
-    </div>
-  </form>
-</div>
+  <h1 class="text-center my-5">Pizze</h1>
+  <div class="d-flex justify-content-between align-items-center">
+    <!--  link add new pizza-->
+    <a class="btn btn-primary"  th:href="@{/pizza/create}">Crea nuova pizza</a>
+    <form th:action="@{pizza}" method="GET" class="d-flex justify-content-end" >
+      <div class="input-group mb-3">
+          <input type="search" class="form-control " th:value="${searchString}" placeholder="Cerca per nome" name="keyword">
+          <button class="btn btn-outline-primary" type="submit">Cerca</button>
+      </div>
+    </form>
+  </div>
   <table class="table table-striped" th:if="${pizze.size() != 0}">
     <thead>
     <tr>
@@ -38,9 +40,9 @@
     </tr>
     </tbody>
   </table>
-<h2 th:if="${pizze.size() == 0 || pizze == null}">
-  Non ci sono pizze disponibili!
-</h2>
+  <h2 th:if="${pizze.size() == 0 || pizze == null}">
+    Non ci sono pizze disponibili!
+  </h2>
 </div>
 </body>
 </html>

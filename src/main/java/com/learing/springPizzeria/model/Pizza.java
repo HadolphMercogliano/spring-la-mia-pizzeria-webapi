@@ -1,6 +1,8 @@
 package com.learing.springPizzeria.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -11,11 +13,19 @@ public class Pizza {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   
+  @NotBlank(message = "Il nome è obbligatorio")
+  @Size(max = 255, message = "Il  nome deve essere di massimo 255 caratteri")
   @Column(nullable = false, unique = true)
   private String name;
   
+  @Size(max = 255, message = "La descrizione deve essere di massimo 255 caratteri")
+  @NotBlank(message = "La descrizione è obbligatoria e deve essere di massimo 255 caratteri")
   private String description;
+  
+  @NotBlank(message = "L'immagine è obbligatoria")
   private String imageUrl;
+  
+  @Min(0)
   private BigDecimal price;
   
   
