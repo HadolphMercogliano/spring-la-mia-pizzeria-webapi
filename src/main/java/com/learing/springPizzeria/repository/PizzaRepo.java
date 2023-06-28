@@ -10,9 +10,7 @@ import java.util.Optional;
 public interface PizzaRepo extends JpaRepository<Pizza, Integer> {
   
   
-//  static Optional<Pizza> findByName(String name) {
-//    return null;
-//  }
+  Optional<Pizza> findByName(String name);
   
   List<Pizza> findByNameContainingIgnoreCase(String name);
   

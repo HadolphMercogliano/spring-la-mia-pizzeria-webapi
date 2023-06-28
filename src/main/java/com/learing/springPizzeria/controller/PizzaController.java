@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -61,13 +62,19 @@ public class PizzaController {
 //  invia al db e salva la nuova pizza
   @PostMapping("/create")
   public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
+    if (!isUniqueName(formPizza)) {
+      // aggiungo a mano un errore nella mappa BindingResult
+      bindingResult.addError(new FieldError("pizza", "name", formPizza.getName(), false, null, null,
+        "é già stata registrata una pizza con questo nome"));
+    }
     if(bindingResult.hasErrors()) {
       return "edit";
     }
+    
     pizzaRepo.save(formPizza);
     redirectAttributes.addFlashAttribute("message",
       new AlertMessage(AlertMessageType.SUCCESS, "Pizza creata!"));
-    return "redirect:/";
+    return "redirect:/pizza";
   }
   
 //  chiedi la view del modulo per modificare la pizza
@@ -84,15 +91,19 @@ public class PizzaController {
 //  invia e salva la modifica della pizza
   @PostMapping("/edit/{id}")
   public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    Pizza pizzaToEdit = getPizzaById(id); //vecchia versione pizza (formPizza è la nuova)
+    if (!pizzaToEdit.getName().equals(formPizza.getName()) && !isUniqueName(formPizza)) {
+      bindingResult.addError(new FieldError("pizza", "name", formPizza.getName(), false, null, null,
+        "Questa pizza esiste già"));
+    }
     if (bindingResult.hasErrors()) {
       return "edit";
     }
-    Pizza pizzaToEdit = getPizzaById(id); //vecchia versione pizza (formPizza è la nuova)
     formPizza.setId(pizzaToEdit.getId());
     pizzaRepo.save(formPizza);
     redirectAttributes.addFlashAttribute("message",
-      new AlertMessage(AlertMessageType.SUCCESS, "Pizza creata con successo!"));
-    return "redirect:/";
+      new AlertMessage(AlertMessageType.SUCCESS, "Pizza modificata con successo!"));
+    return "redirect:/pizza";
   }
   
 //  cancella la pizza
@@ -101,7 +112,7 @@ public class PizzaController {
     Pizza pizzaToDelete=getPizzaById(id);
     pizzaRepo.delete(pizzaToDelete);
     redirectAttributes.addFlashAttribute("message","pizza " + pizzaToDelete.getName() + " eliminata");
-    return "redirect:/";
+    return "redirect:/pizza";
   }
   
   private Pizza getPizzaById(Integer id){
@@ -111,10 +122,12 @@ public class PizzaController {
     }
     return result.get();
   }
-//  private boolean isUniqueName(Pizza formPizza){
-//    Optional<Pizza> result = PizzaRepo.findByName(formPizza.getName());
-//    return result.isEmpty();
-//  }
+  
+  private boolean isUniqueName(Pizza formPizza) {
+    Optional<Pizza> result = pizzaRepo.findByName(formPizza.getName());
+    return result.isEmpty();
+  }
+  
 }
 
 
