@@ -1,12 +1,15 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 <!-- fragment della navbar: current è il nome dell'area in cui sto navigando -->
 <nav class="navbar navbar-expand-md" th:fragment="navbar(current)">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Spring Pizzeria</a>
+    <div class="logo-container">
+    <a class="navbar-brand" href="#"><img th:src="@{/Logo.png}" class="img-fluid logo"></a>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
             aria-label="Toggle navigation">
