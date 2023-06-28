@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{/fragments :: head(pageTitle='pizze')}">
-</head>
+<head th:insert="~{/fragments :: head(pageTitle='Menù')}"></head>
 <body>
 <div class="container ">
-  <nav th:replace="~{/navbar :: navbar(current='pizze')}"></nav>
+  <nav th:replace="~{/navbar :: navbar(current='Menù')}"></nav>
   <h1 class="text-center my-5">Pizze</h1>
   <div th:if="${message != null}" class="alert alert-dismissible fade show"
        th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">

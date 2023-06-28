@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{/fragments :: head(pageTitle='edit')}"></head>
+<head th:insert="~{/fragments :: head(pageTitle='Edit')}"></head>
 <body th:with="isEdit=${pizza.id!= null}">
 <div class="container">
-  <nav th:replace="~{/navbar :: navbar(current='edit')}"></nav>
-<h1 class="my-5" th:text="${isEdit ? 'Modifica pizza' : 'Nuova pizza'}"></h1>
-<!-- aggiungi il th:with-->
+  <nav th:replace="~{/navbar :: navbar(current='Edit')}"></nav>
+  <h1 class="my-5" th:text="${isEdit ? 'Modifica pizza' : 'Nuova pizza'}"></h1>
+  <!-- aggiungi il th:with-->
   <form method="post"
         th:action="${isEdit ? '/pizza/edit/'+ pizza.id : '/pizza/create'}"
         th:object="${pizza}"
