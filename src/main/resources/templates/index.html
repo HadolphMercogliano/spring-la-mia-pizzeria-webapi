@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <th:block th:replace="fragments :: bootstrap"></th:block>
-
-  <title>Pizzeria Java</title>
+<head th:insert="~{/fragments :: head(pageTitle='pizze')}">
 </head>
 <body>
 <div class="container ">
+  <nav th:replace="~{/navbar :: navbar(current='pizze')}"></nav>
   <h1 class="text-center my-5">Pizze</h1>
+  <div th:if="${message != null}" class="alert alert-dismissible fade show"
+       th:classAppend="${#strings.equalsIgnoreCase(message.type, 'SUCCESS')} ? 'alert-success' : 'alert-danger'">
+    <div th:text="${message.message}"></div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <div class="d-flex justify-content-between align-items-center">
-    <!--  link add new pizza-->
     <a class="btn btn-primary"  th:href="@{/pizza/create}">Crea nuova pizza</a>
     <form th:action="@{pizza}" method="GET" class="d-flex justify-content-end" >
       <div class="input-group mb-3">
@@ -18,6 +19,7 @@
           <button class="btn btn-outline-primary" type="submit">Cerca</button>
       </div>
     </form>
+
   </div>
   <table class="table table-striped" th:if="${pizze.size() != 0}">
     <thead>
@@ -36,7 +38,14 @@
       <td th:text="${p.name}"></td>
       <td th:text="${p.description}">Otto</td>
       <td th:text="|€ ${p.price}|"></td>
-      <td><a th:href="|/pizza/${p.getId()}|">Dettaglio</a></td>
+      <td class="d-flex align-items-center ">
+        <a class="btn btn-primary px-2 py-1 me-1" th:href="|/pizza/${p.getId()}|"><i class="fa-solid fa-pizza-slice"></i></a>
+        <a class="btn btn-warning px-2 py-1 me-1" th:href="|/pizza/edit/${p.getId()}|"><i class="fa-solid fa-pen-to-square"></i></a>
+        <form method="post" th:action="@{|/pizza/delete/${p.getId()}|}">
+          <button class="btn btn-danger px-2 py-1" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+        </form>
+      </td>
+
     </tr>
     </tbody>
   </table>

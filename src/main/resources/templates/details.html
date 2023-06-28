@@ -1,26 +1,22 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <th:block th:replace="fragments :: bootstrap"></th:block>
-</head>
-<body>
+<head th:insert="~{/fragments :: head(pageTitle='pizze')}"></head>
 
+<body>
 <div class="container my-5" th:object="${pizza}">
-  <h1 class="text-center" th:text="|Dettaglio pizza *{name}|"></h1>
+  <nav  th:replace="~{/navbar :: navbar(current='pizze')}"></nav>
+
+  <h1 class="text-center my-5" th:text="|Dettaglio pizza *{name}|"></h1>
   <div class="row d-flex justify-content-center">
-    <div class="col-6 my-5 d-flex justify-content-center">
+    <div class="col-6  d-flex justify-content-center">
       <div class="card">
       <img class="img-fluid card-img-top" th:src="*{imageUrl}" alt="" src="">
         <div class="card-body">
-      <h3 th:text="*{name}"></h3>
+          <h3 th:text="*{name}"></h3>
+          <p><small th:text="| *{description}|"></small></p>
+          <p><strong>Prezzo</strong><small th:text="| *{price}|"></small> €</p>
 
-      <p><small th:text="| *{description}|"></small></p>
-        <a th:href="@{/pizza}">Torna alla lista</a>
+          <p class="text-end m-0 "><a th:href="@{/pizza}">Torna alla lista</a></p>
         </div>
       </div>
     </div>
