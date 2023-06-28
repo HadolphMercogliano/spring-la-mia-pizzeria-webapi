@@ -25,9 +25,10 @@ public class Pizza {
   @NotBlank(message = "L'immagine è obbligatoria")
   private String imageUrl;
   
-  @Min(0)
+  @DecimalMin(value ="0.0", inclusive= false,message ="Il prezzo deve essere maggiore di 0")
+  @NotNull (message= "Il prezzo è obbligatorio")
+  @Column(nullable = false)
   private BigDecimal price;
-  
   
   public Integer getId() {
     return id;

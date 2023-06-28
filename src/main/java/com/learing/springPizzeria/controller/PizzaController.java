@@ -1,5 +1,7 @@
 package com.learing.springPizzeria.controller;
 
+import com.learing.springPizzeria.messages.AlertMessage;
+import com.learing.springPizzeria.messages.AlertMessageType;
 import com.learing.springPizzeria.model.Pizza;
 import com.learing.springPizzeria.repository.PizzaRepo;
 import jakarta.validation.Valid;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,19 +51,65 @@ public class PizzaController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza non trovata");
     }
   }
+  
+//  chiede la view per aggiungere una nuova pizza
   @GetMapping("/create")
   public String create(Model model) {
     model.addAttribute("pizza",new Pizza());
-    return "create";
+    return "edit";
   }
+//  invia al db e salva la nuova pizza
   @PostMapping("/create")
-  public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model){
+  public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult,RedirectAttributes redirectAttributes) {
     if(bindingResult.hasErrors()) {
-      return "create";
+      return "edit";
     }
-//    formPizza.setCreatedAt(LocalDateTime.now());
     pizzaRepo.save(formPizza);
+    redirectAttributes.addFlashAttribute("message",
+      new AlertMessage(AlertMessageType.SUCCESS, "Pizza creata!"));
     return "redirect:/";
+  }
+  
+//  chiedi la view del modulo per modificare la pizza
+  @GetMapping("/edit/{id}")
+  public String edit(@PathVariable Integer id, Model model) {
+    Optional<Pizza> result = pizzaRepo.findById(id);
+    if(result.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza con id " + id + " non trovata");
+    }
+    model.addAttribute("pizza", result.get());
+    return "edit";
+  }
+  
+//  invia e salva la modifica della pizza
+  @PostMapping("/edit/{id}")
+  public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    if (bindingResult.hasErrors()) {
+      return "edit";
+    }
+    Pizza pizzaToEdit = getPizzaById(id); //vecchia versione pizza (formPizza è la nuova)
+    formPizza.setId(pizzaToEdit.getId());
+    pizzaRepo.save(formPizza);
+    redirectAttributes.addFlashAttribute("message",
+      new AlertMessage(AlertMessageType.SUCCESS, "Pizza creata con successo!"));
+    return "redirect:/";
+  }
+  
+//  cancella la pizza
+  @PostMapping("/delete/{id}")
+  public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+    Pizza pizzaToDelete=getPizzaById(id);
+    pizzaRepo.delete(pizzaToDelete);
+    redirectAttributes.addFlashAttribute("message","pizza " + pizzaToDelete.getName() + " eliminata");
+    return "redirect:/";
+  }
+  
+  private Pizza getPizzaById(Integer id){
+    Optional<Pizza> result = pizzaRepo.findById(id);
+    if(result.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza con id " + id + " non trovata");
+    }
+    return result.get();
   }
 //  private boolean isUniqueName(Pizza formPizza){
 //    Optional<Pizza> result = PizzaRepo.findByName(formPizza.getName());
