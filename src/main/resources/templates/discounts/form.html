@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments :: head(pageTitle='Discount')}"></head>
+<body>
+<div class="container">
+<nav th:replace="~{/navbar :: navbar(current='Discount')}"></nav>
+  <h1> Sconti</h1>
+
+  <form
+          th:with="formAction=${discount.id != null ? '/discounts/edit/'+borrowing.id : '/discount/create'}"
+          id="borrowing-form"
+          method="post"
+          th:action="@{${formAction}}"
+          th:object="${borrowing}"
+          class="row gy-3"
+  ></form>
+</div>
+
+
+</body>
