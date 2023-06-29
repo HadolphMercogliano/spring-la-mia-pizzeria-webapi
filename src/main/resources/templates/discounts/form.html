@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/fragments :: head(pageTitle='Discount')}"></head>
+<body>
+<div class="container">
+<nav th:replace="~{/navbar :: navbar(current='Discount')}"></nav>
+  <h1 th:text="|Sconti ${discount.pizza.name}|"></h1>
+
+  <form
+          th:with="formAction=${discount.id != null ? '/discounts/edit/'+discount.id : '/discounts/create'}"
+          id="discount-form"
+          method="post"
+          th:action="@{${formAction}}"
+          th:object="${discount}"
+          class="row gy-3"
+  >
+    <input type="hidden" th:field="*{pizza}">
+  </form>
+</div>
+
+
+</body>
