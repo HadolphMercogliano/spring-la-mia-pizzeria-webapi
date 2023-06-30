@@ -15,6 +15,40 @@
           class="row gy-3"
   >
     <input type="hidden" th:field="*{pizza}">
+    <div class="col-6">
+      <label class="form-label" for="discount-name">Nome Offerta*</label>
+      <input class="form-control" type="text" id="discount-name" th:field="*{discountName}"
+             th:errorClass="is-invalid">
+      <div th:if="${#fields.hasErrors('discountName')}" class="invalid-feedback">
+        <ul>
+          <li th:each="err : ${#fields.errors('discountName')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-6">
+      <label class="form-label" for="discount-start-date">Data inizio offerta*</label>
+      <input class="form-control" type="date" id="discount-start-date" th:field="*{discountStartDate}"
+             th:errorClass="is-invalid">
+      <div th:if="${#fields.hasErrors('discountStartDate')}" class="invalid-feedback">
+        <ul>
+          <li th:each="err : ${#fields.errors('discountStartDate')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-6">
+      <label class="form-label" for="discount-end-date">Data fine offerta</label>
+      <input class="form-control" type="date" id="discount-end-date" th:field="*{discountEndDate}"
+             th:errorClass="is-invalid">
+      <div th:if="${#fields.hasErrors('discountEndDate')}" class="invalid-feedback">
+        <ul>
+          <li th:each="err : ${#fields.errors('discountEndDate')}" th:text="${err}"></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-12 my-3">
+      <button class="btn btn-primary" type="submit">Salva</button>
+      <a class="btn btn-primary" th:href="@{|/pizza/${discount.pizza.id}|}">Cancel</a>
+    </div>
   </form>
 </div>
 
