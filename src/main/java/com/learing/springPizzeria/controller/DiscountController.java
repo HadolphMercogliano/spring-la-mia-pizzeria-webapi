@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Controller
@@ -70,7 +69,7 @@ public class DiscountController {
 
     discountRepo.save(formDiscount);
 
-    return "redirect:/books/" + formDiscount.getPizza().getId();
+    return "redirect:/pizza/" + formDiscount.getPizza().getId();
   }
   
   @PostMapping("/delete/{id}")
@@ -82,6 +81,6 @@ public class DiscountController {
     }
 
     discountRepo.delete(discountToDelete.get());
-    return "redirect:/books/" + discountToDelete.get().getPizza().getId();
+    return "redirect:/pizza/" + discountToDelete.get().getPizza().getId();
   }
 }
