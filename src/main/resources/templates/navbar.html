@@ -8,7 +8,7 @@
 <nav class="navbar navbar-expand-md" th:fragment="navbar(current)">
   <div class="container-fluid">
     <div class="">
-      <img th:src="@{/Logo.png}" class="img-fluid logo">
+      <img style="width: 50px;" th:src="@{/Logo.png}" class="img-fluid logo">
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
@@ -20,13 +20,16 @@
         <!-- nei link appendo la classe active se l'area corrisponde a quella del link -->
         <li class="nav-item">
           <a class="nav-link" th:href="@{/}"
-             th:classappend="${current == 'pizze' ? 'active' : ''}">Menù</a>
+             th:classappend="${current == 'Menù' ? 'active' : ''}">Menù</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/pizza/create}"
-             th:classappend="${current == 'edit' ? 'active' : ''}">Nuova pizza</a>
+             th:classappend="${current == 'Edit' ? 'active' : ''}">Nuova pizza</a>
         </li>
-
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/ingredients}"
+             th:classappend="${current == 'Ingredients' ? 'active' : ''}">Ingredienti</a>
+        </li>
       </ul>
     </div>
   </div>

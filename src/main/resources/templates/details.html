@@ -3,7 +3,7 @@
 <head th:insert="~{/fragments :: head(pageTitle='pizze')}"></head>
 
 <body>
-<div class="container my-5" th:object="${pizza}">
+<div class="container" th:object="${pizza}">
   <nav  th:replace="~{/navbar :: navbar(current='pizze')}"></nav>
 
   <h1 class="text-center my-5" th:text="|Dettaglio pizza *{name}|"></h1>

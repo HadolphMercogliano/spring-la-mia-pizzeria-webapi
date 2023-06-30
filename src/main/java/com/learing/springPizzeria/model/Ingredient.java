@@ -5,21 +5,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "categories")
-public class Category {
+@Table(name = "ingredients")
+public class Ingredient {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  
+  @NotNull
+  @Size(min = 2, max = 80)
   @Column(nullable = false)
-  private String name;
-  @Lob
-  @Column(columnDefinition = "TEXT")
-  private String description;
+  private String ingredient;
   
   public Integer getId() {
     return id;
@@ -29,19 +30,11 @@ public class Category {
     this.id = id;
   }
   
-  public String getName() {
-    return name;
+  public String getIngredient() {
+    return ingredient;
   }
   
-  public void setName(String name) {
-    this.name = name;
-  }
-  
-  public String getDescription() {
-    return description;
-  }
-  
-  public void setDescription(String description) {
-    this.description = description;
+  public void setIngredient(String ingredient) {
+    this.ingredient = ingredient;
   }
 }
