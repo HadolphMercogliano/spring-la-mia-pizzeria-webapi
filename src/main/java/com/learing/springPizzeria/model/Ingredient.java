@@ -1,13 +1,11 @@
 package com.learing.springPizzeria.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ingredients")
@@ -21,6 +19,9 @@ public class Ingredient {
   @Size(min = 2, max = 80)
   @Column(nullable = false)
   private String ingredient;
+  
+  @ManyToMany(mappedBy = "ingredients")
+  private List<Pizza> pizze = new ArrayList<>();
   
   public Integer getId() {
     return id;
@@ -36,5 +37,13 @@ public class Ingredient {
   
   public void setIngredient(String ingredient) {
     this.ingredient = ingredient;
+  }
+  
+  public List<Pizza> getPizze() {
+    return pizze;
+  }
+  
+  public void setBooks(List<Pizza> pizze) {
+    this.pizze = pizze;
   }
 }
