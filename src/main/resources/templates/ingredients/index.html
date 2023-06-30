@@ -14,8 +14,7 @@
             th:each="ing : ${ingredients}"
             th:object="${ing}">
           <div>
-          <h4 th:text="*{ingredient}"></h4>
-          
+          <h5 th:text="*{ingredient}"></h5>
           </div>
           <div class="d-flex">
           <a th:href="@{/ingredients(edit=*{id})}" class="btn btn-primary px-2 py-1 me-1"><i
@@ -32,10 +31,10 @@
     </div>
     
       <div class="col-6">
-        <h4>Aggiungi ingrediente</h4>
+        <p>Aggiungi ingrediente</p>
         <form th:action="@{ingredients/save}" id="ingredient-form" method="post" th:object="${ingredientObj}">
           <div class="">
-            <input type="hidden"th:field="*{id}">
+            <input type="hidden" th:field="*{id}">
             <label class="form-label" for="ingredient">Nome Ingrediente*</label>
             <input class="form-control" type="text" id="ingredient" th:field="*{ingredient}"
                    th:errorClass="is-invalid">

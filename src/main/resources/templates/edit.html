@@ -47,10 +47,19 @@
         </ul>
       </div>
     </div>
+      <h3>Ingredienti</h3>
+    <div class="col-12 d-flex flex-wrap">
+      <div class="form-check d-flex align-items-center" th:each="ing : ${ingredientList}">
+        <input class="form-check-input me-1" type="checkbox" th:value="${ing.id}" th:id="|ing_${ing.id}|"
+               th:field="*{ingredients}">
+        <label class="form-check-label me-3" th:for="|ing_${ing.id}|" th:text="${ing.ingredient}">
+        </label>
+      </div>
+    </div>
 
     <div class="col-12 d-flex justify-content-center my-4">
-      <button class="btn btn-primary" type="submit">Salva</button>
-      <a th:href="@{/pizza}"><button class="btn btn-outline-secondary" type="button">Cancel</button></a>
+      <button class="btn btn-success me-3" type="submit">Salva</button>
+      <a th:href="@{/pizza}"><button class="btn btn-secondary" type="button">Cancel</button></a>
     </div>
   </form>
 </div>

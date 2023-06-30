@@ -14,7 +14,12 @@
         <div class="card-body">
           <h3 th:text="*{name}"></h3>
           <p><small th:text="| *{description}|"></small></p>
-          <p><strong>Prezzo</strong><small th:text="| *{price}|"></small> €</p>
+          <p class="fw-semibold">Ingredienti:
+            <small class="fw-normal" th:each="ing : *{ingredients}" th:text="| ${ing.ingredient}|"></small>
+          </p>
+          <p class="fw-semibold">Prezzo:
+            <small class="fw-normal" th:text="| *{price} €|"></small>
+          </p>
 
           <p class="text-end m-0"><a th:href="@{/pizza}">Torna alla lista</a></p>
         </div>
