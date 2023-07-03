@@ -2,3 +2,6 @@ INSERT INTO `pizze` (`id`, `price`, `description`, `image_url`, `name`) VALUES (
 INSERT INTO `discounts` (`pizza_id`, `discount_name`, `discount_start_date`, `discount_end_date`) VALUES (1, 'Menù Margherita', '2023-06-30', '2023-08-28'), (2, 'Menù Ortolana', '2023-06-29','2023-09-12'), (3, 'Menù Diavola', '2023-12-24','2023-12-25'), (4, 'Menù Salsicce e friarielli', '2023-06-29', '2023-11-12' ), (5, 'Menù Wurstel e patatine', '2023-07-24','2023-11-12');
 INSERT INTO `ingredients` (`ingredient`) VALUES ('farina'),('acqua'),('pomodoro'),('patatine'),('peperoni'),('melanzane'),('wurstel'),('mozzarella'),('basilico');
 INSERT INTO `pizza_ingredient` (pizza_id, ingredient_id) VALUES(1,1),(2,1),(3,1),(4,1),(5,1),(1,2),(2,2),(3,2),(4,2),(5,2),(1,3),(1,8),(1,9);
+INSERT INTO `users`(`id`, `email`, `first_name`, `last_name`, `password`) VALUES (1,'email1@email.com','Hadolph','Mercogliano','{noop}password1'),(2,'email2@email.com','Giovanni','Toni','{noop}password2');
+INSERT INTO `roles`(`id`, `name`) VALUES (1,'ADMIN'),(2,'USER');
+INSERT INTO `users_roles`(`user_id`, `roles_id`) VALUES (1,1),(2,2);

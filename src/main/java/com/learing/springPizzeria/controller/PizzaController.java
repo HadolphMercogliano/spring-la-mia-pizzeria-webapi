@@ -120,7 +120,7 @@ public class PizzaController {
   public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
     Pizza pizzaToDelete=getPizzaById(id);
     pizzaRepo.delete(pizzaToDelete);
-    redirectAttributes.addFlashAttribute("message","pizza " + pizzaToDelete.getName() + " eliminata");
+    redirectAttributes.addFlashAttribute("message",new AlertMessage(AlertMessageType.SUCCESS, "pizza " + pizzaToDelete.getName() + " eliminata"));
     return "redirect:/pizza";
   }
   

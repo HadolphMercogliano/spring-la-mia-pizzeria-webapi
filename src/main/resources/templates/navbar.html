@@ -31,6 +31,11 @@
              th:classappend="${current == 'Ingredients' ? 'active' : ''}">Ingredienti</a>
         </li>
       </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>
