@@ -11,13 +11,13 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   <div class="d-flex justify-content-between align-items-center">
-    <a class="btn btn-primary"  th:href="@{/pizza/create}">Crea nuova pizza</a>
     <form th:action="@{pizza}" method="GET" class="d-flex justify-content-end" >
       <div class="input-group mb-3">
           <input type="search" class="form-control " th:value="${searchString}" placeholder="Cerca per nome" name="keyword">
           <button class="btn btn-outline-primary" type="submit">Cerca</button>
       </div>
     </form>
+    <a  sec:authorize="hasAuthority('ADMIN')" class="btn btn-primary"  th:href="@{/pizza/create}">Crea nuova pizza</a>
 
   </div>
   <table class="table table-striped" th:if="${pizze.size() != 0}">
@@ -39,8 +39,9 @@
       <td th:text="|€ ${p.price}|"></td>
       <td class="d-flex align-items-center ">
         <a class="btn btn-primary px-2 py-1 me-1" th:href="|/pizza/${p.getId()}|"><i class="fa-solid fa-pizza-slice"></i></a>
-        <a class="btn btn-warning px-2 py-1 me-1" th:href="|/pizza/edit/${p.getId()}|"><i class="fa-solid fa-pen-to-square"></i></a>
-        <form method="post" th:action="@{|/pizza/delete/${p.getId()}|}">
+        <a class="btn btn-warning px-2 py-1 me-1" sec:authorize="hasAuthority('ADMIN')" th:href="|/pizza/edit/${p.getId()}|"><i
+                class="fa-solid fa-pen-to-square"></i></a>
+        <form method="post" th:action="@{|/pizza/delete/${p.getId()}|}" sec:authorize="hasAuthority('ADMIN')">
           <button class="btn btn-danger px-2 py-1" type="submit"><i class="fa-solid fa-trash-can"></i></button>
         </form>
       </td>

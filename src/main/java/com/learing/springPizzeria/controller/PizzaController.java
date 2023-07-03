@@ -8,6 +8,7 @@ import com.learing.springPizzeria.repository.PizzaRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +31,7 @@ public class PizzaController {
   
   @GetMapping
   public String index(
-    @RequestParam(name= "keyword", required=false) String searchString,
+    @RequestParam(name= "keyword", required=false) String searchString, Authentication authentication,
     Model model) {
     List<Pizza> pizze;
     if (searchString == null || searchString.isBlank()) {
@@ -40,6 +41,7 @@ public class PizzaController {
     }
     model.addAttribute("searchInput", searchString == null ? "" :searchString);
       model.addAttribute("pizze", pizze);
+    model.addAttribute("username", authentication.getName());
       return "index";
     }
   

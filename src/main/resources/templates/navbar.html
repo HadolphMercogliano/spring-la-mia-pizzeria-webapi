@@ -17,6 +17,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+        <li class="nav-item d-flex align-items-center ms-2">
+          <p class="m-0 p-0"> Utente:
+         <span sec:authentication="name"></span></p>
+        </li>
         <!-- nei link appendo la classe active se l'area corrisponde a quella del link -->
         <li class="nav-item">
           <a class="nav-link" th:href="@{/}"
@@ -24,16 +28,21 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/pizza/create}"
+             sec:authorize="hasAuthority('ADMIN')"
              th:classappend="${current == 'Edit' ? 'active' : ''}">Nuova pizza</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/ingredients}"
+             sec:authorize="hasAuthority('ADMIN')"
              th:classappend="${current == 'Ingredients' ? 'active' : ''}">Ingredienti</a>
         </li>
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/logout}">Logout</a>
+          <a class="nav-link" th:href="@{/logout}" sec:authorize="hasAuthority('ADMIN')">Logout</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/logout}" sec:authorize="hasAuthority('USER')">Logout</a>
         </li>
       </ul>
     </div>
