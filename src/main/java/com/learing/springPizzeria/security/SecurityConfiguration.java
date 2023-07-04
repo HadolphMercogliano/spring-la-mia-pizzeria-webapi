@@ -50,11 +50,13 @@ public class SecurityConfiguration {
       .requestMatchers("/ingredients/**").hasAuthority("ADMIN")
       .requestMatchers("/pizza/delete/*").hasAuthority("ADMIN")
       .requestMatchers("/discounts/**").hasAuthority("ADMIN")
-      .requestMatchers(HttpMethod.POST).hasAuthority("ADMIN")
+      .requestMatchers(HttpMethod.POST, "/pizza/**").hasAuthority("ADMIN")
       .requestMatchers("/pizza").hasAnyAuthority("ADMIN","USER")
       .requestMatchers("/**").permitAll()
+      .requestMatchers("/api/**").permitAll()
       .and().formLogin()
       .and().logout();
+    http.csrf().disable();
     return http.build();
   }
 }
