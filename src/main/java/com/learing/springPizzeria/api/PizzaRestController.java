@@ -1,15 +1,15 @@
 package com.learing.springPizzeria.api;
 
+import com.learing.springPizzeria.exeptions.NotUniqueNameExeption;
+import com.learing.springPizzeria.exeptions.PizzaNotFound;
 import com.learing.springPizzeria.model.Pizza;
 import com.learing.springPizzeria.repository.PizzaRepo;
 import com.learing.springPizzeria.service.PizzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,31 +34,32 @@ public class PizzaRestController {
 
   @GetMapping("/{id}")
   public Pizza get(@PathVariable Integer id) {
-    Optional<Pizza> pizza = pizzaRepo.findById(id);
-    if( pizza.isPresent()) {
-      return pizza.get();
-    } else {
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    try {
+      return pizzaService.getById(id);
+    } catch (PizzaNotFound e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
     }
   }
   
   @PostMapping
-  public Pizza create(@Valid @RequestBody Pizza pizza, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, bindingResult.toString());
+  public Pizza create(@Valid @RequestBody Pizza pizza) {
+    try {
+      return pizzaService.create(pizza);
+    } catch (NotUniqueNameExeption e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
-    return pizzaRepo.save(pizza);
   }
   
-  @DeleteMapping("/{id}")
-  public void delete(@PathVariable Integer id) {
-    pizzaRepo.deleteById(id);
-  }
-  
+  //  UPDATE METHOD
   @PutMapping("/{id}")
   public Pizza update(@PathVariable Integer id,@Valid @RequestBody Pizza pizza) {
     pizza.setId(id);
     return pizzaRepo.save(pizza);
+  }
+//  DELETE METHOD
+  @DeleteMapping("/{id}")
+  public void delete(@PathVariable Integer id) {
+    pizzaRepo.deleteById(id);
   }
   
   //Paging
