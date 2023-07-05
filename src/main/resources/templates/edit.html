@@ -7,6 +7,7 @@
   <h1 class="my-5" th:text="${isEdit ? 'Modifica pizza' : 'Nuova pizza'}"></h1>
   <!-- aggiungi il th:with-->
   <form method="post"
+        enctype="multipart/form-data"
         th:action="${isEdit ? '/pizza/edit/'+ pizza.id : '/pizza/create'}"
         th:object="${pizza}"
         id="pizza-form"
@@ -31,13 +32,13 @@
     </div>
 
     <div class="col-6">
-      <label class="form-label" for="pizza-img">Link immagine</label>
-      <input class="form-control" type="text" id="pizza-img" th:field="*{imageUrl}">
-      <div th:if="${#fields.hasErrors('imageUrl')}" class="invalid-feedback">
-        <ul>
-          <li th:each="err : ${#fields.errors('imageUrl')}" th:text="${err}"></li>
-        </ul>
-      </div>
+<!--      <label class="form-label" for="pizza-img">Link immagine</label>-->
+<!--      <input class="form-control" type="text" id="pizza-img" th:field="*{imageUrl}">-->
+<!--      <div th:if="${#fields.hasErrors('imageUrl')}" class="invalid-feedback">-->
+<!--        <ul>-->
+<!--          <li th:each="err : ${#fields.errors('imageUrl')}" th:text="${err}"></li>-->
+<!--        </ul>-->
+<!--      </div>-->
 
       <label class="form-label" for="pizza-name">Prezzo</label>
       <input class="form-control" type="number" id="pizza-price" th:field="*{price}">
@@ -45,6 +46,18 @@
         <ul>
           <li th:each="err : ${#fields.errors('price')}" th:text="${err}"></li>
         </ul>
+      </div>
+      <div class="mb-3">
+        <label for="coverFile" class="form-label">Cover File</label>
+        <input class="form-control" type="file" id="coverFile" th:field="*{coverFile}">
+        <div th:if="${#fields.hasErrors('coverFile')}" class="invalid-feedback">
+          <ul>
+            <li th:each="err : ${#fields.errors('coverFile')}" th:text="${err}"></li>
+          </ul>
+        </div>
+        <div>
+          <img width="100" th:src="@{|/files/cover/*{id}|}" alt="Immagine non presente">
+        </div>
       </div>
     </div>
       <h3>Ingredienti</h3>
@@ -55,6 +68,9 @@
         <label class="form-check-label me-3" th:for="|ing_${ing.id}|" th:text="${ing.ingredient}">
         </label>
       </div>
+    </div>
+    <div>
+    
     </div>
 
     <div class="col-12 d-flex justify-content-center my-4">

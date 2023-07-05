@@ -1,8 +1,10 @@
 package com.learing.springPizzeria.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.learing.springPizzeria.repository.IngredientRepo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,8 +27,9 @@ public class Pizza {
   @NotBlank(message = "La descrizione è obbligatoria e deve essere di massimo 255 caratteri")
   private String description;
   
-  @NotBlank(message = "L'immagine è obbligatoria")
-  private String imageUrl;
+  @Lob
+  @Column(length= 16777215)
+  private byte[] cover;
   
   @DecimalMin(value ="0.0", inclusive= false,message ="Il prezzo deve essere maggiore di 0")
   @NotNull (message= "Il prezzo è obbligatorio")
@@ -55,10 +58,6 @@ public class Pizza {
     return description;
   }
   
-  public String getImageUrl() {
-    return imageUrl;
-  }
-  
   public BigDecimal getPrice() {
     return price;
   }
@@ -79,12 +78,16 @@ public class Pizza {
     this.description = description;
   }
   
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
-  
   public void setPrice(BigDecimal price) {
     this.price = price;
+  }
+  
+  public byte[] getCover() {
+    return cover;
+  }
+  
+  public void setCover(byte[] cover) {
+    this.cover = cover;
   }
   
   public void setDiscountList(List<Discount> discountList) { this.discountList = discountList;  }

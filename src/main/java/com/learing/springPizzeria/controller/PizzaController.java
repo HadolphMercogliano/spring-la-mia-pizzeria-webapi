@@ -1,10 +1,14 @@
 package com.learing.springPizzeria.controller;
 
+import com.learing.springPizzeria.dto.PizzaForm;
+import com.learing.springPizzeria.exeptions.NotUniqueNameExeption;
+import com.learing.springPizzeria.exeptions.PizzaNotFound;
 import com.learing.springPizzeria.messages.AlertMessage;
 import com.learing.springPizzeria.messages.AlertMessageType;
 import com.learing.springPizzeria.model.Pizza;
 import com.learing.springPizzeria.repository.IngredientRepo;
 import com.learing.springPizzeria.repository.PizzaRepo;
+import com.learing.springPizzeria.service.PizzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +32,8 @@ public class PizzaController {
   private PizzaRepo pizzaRepo;
   @Autowired
   private IngredientRepo ingredientRepo;
+  @Autowired
+  PizzaService pizzaService;
   
   @GetMapping
   public String index(
@@ -47,38 +53,35 @@ public class PizzaController {
   
   @GetMapping("/{id}")
   public String details(@PathVariable("id") Integer id, Model model) {
-    
-    Optional<Pizza> result = pizzaRepo.findById(id);
-    if(result.isPresent()) {
-    model.addAttribute("pizza", result.get());
+   Pizza pizza = getPizzaById(id);
+    model.addAttribute("pizza", pizza);
     return "details";
-    } else {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pizza non trovata");
-    }
+    
   }
   
 //  chiede la view per aggiungere una nuova pizza
   @GetMapping("/create")
   public String create(Model model) {
-    model.addAttribute("pizza",new Pizza());
+    model.addAttribute("pizza",new PizzaForm());
     model.addAttribute("ingredientList", ingredientRepo.findAll());
     
     return "edit";
   }
 //  invia al db e salva la nuova pizza
   @PostMapping("/create")
-  public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult,RedirectAttributes redirectAttributes,Model model) {
-    if (!isUniqueName(formPizza)) {
-      // aggiungo a mano un errore nella mappa BindingResult
-      bindingResult.addError(new FieldError("pizza", "name", formPizza.getName(), false, null, null,
-        "é già stata registrata una pizza con questo nome"));
+  public String store(@Valid @ModelAttribute("pizza") PizzaForm formPizza, BindingResult bindingResult,RedirectAttributes redirectAttributes,Model model) {
+    if (!bindingResult.hasErrors()) {
+      try {
+      pizzaService.create(formPizza);
+      } catch (NotUniqueNameExeption e) {
+        bindingResult.addError(new FieldError("pizza", "name",formPizza.getName(),false,null,null, "il nome deve essere unico" ));
+      }
     }
     if(bindingResult.hasErrors()) {
       model.addAttribute("ingredientList", ingredientRepo.findAll());
       return "edit";
     }
-    
-    pizzaRepo.save(formPizza);
+//    pizzaRepo.save(formPizza);
     redirectAttributes.addFlashAttribute("message",
       new AlertMessage(AlertMessageType.SUCCESS, "Pizza creata!"));
     return "redirect:/pizza";
@@ -87,31 +90,35 @@ public class PizzaController {
 //  chiedi la view del modulo per modificare la pizza
   @GetMapping("/edit/{id}")
   public String edit(@PathVariable Integer id, Model model) {
-    Optional<Pizza> result = pizzaRepo.findById(id);
-    if(result.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "pizza con id " + id + " non trovata");
+    try {
+      PizzaForm pizzaForm = pizzaService.getPizzaFormById(id);
+      model.addAttribute("pizza", pizzaForm);
+      model.addAttribute("ingredientList", ingredientRepo.findAll());
+      return "edit";
+    } catch (PizzaNotFound e) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-    model.addAttribute("pizza", result.get());
-    model.addAttribute("ingredientList", ingredientRepo.findAll());
-    
-    return "edit";
   }
   
 //  invia e salva la modifica della pizza
   @PostMapping("/edit/{id}")
-  public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, RedirectAttributes redirectAttributes,Model model) {
-    Pizza pizzaToEdit = getPizzaById(id); //vecchia versione pizza (formPizza è la nuova)
-    if (!pizzaToEdit.getName().equals(formPizza.getName()) && !isUniqueName(formPizza)) {
-      bindingResult.addError(new FieldError("pizza", "name", formPizza.getName(), false, null, null,
-        "Questa pizza esiste già"));
+  public String update(@PathVariable Integer id, @Valid @ModelAttribute("pizza") PizzaForm formPizza, BindingResult bindingResult, RedirectAttributes redirectAttributes,Model model) {
+//    Pizza pizzaToEdit = getPizzaById(id); //vecchia versione pizza (formPizza è la nuova)
+    
+    if (!bindingResult.hasErrors()) {
+      try {
+      pizzaService.update(formPizza);
+      } catch (PizzaNotFound e) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+      } catch (NotUniqueNameExeption e) {
+        bindingResult.addError(new FieldError("pizza","name", formPizza.getName(),false,null,null, "Il nome deve essere unico" ));
+      }
     }
     if (bindingResult.hasErrors()) {
       model.addAttribute("ingredientList", ingredientRepo.findAll());
-      
-      return "edit";
+    return "edit";
     }
-    formPizza.setId(pizzaToEdit.getId());
-    pizzaRepo.save(formPizza);
+    
     redirectAttributes.addFlashAttribute("message",
       new AlertMessage(AlertMessageType.SUCCESS, "Pizza modificata con successo!"));
     return "redirect:/pizza";

@@ -10,7 +10,9 @@
   <div class="row d-flex justify-content-center">
     <div class="col-6  d-flex justify-content-center">
       <div class="card">
-      <img class="img-fluid card-img-top" th:src="*{imageUrl}" alt="" src="">
+<!--        <img class="img-fluid card-img-top" th:src="*{imageUrl}" alt="" src="">-->
+        <img class="img-fluid card-img-top" th:src="@{|/files/cover/*{id}|}" alt="pizzaImg" src="">
+        
         <div class="card-body">
           <h3 th:text="*{name}"></h3>
           <p><small th:text="| *{description}|"></small></p>
